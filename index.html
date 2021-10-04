@@ -1,0 +1,224 @@
+ <!DOCTYPE html>
+    <html>
+    <head>
+    <title>Employee Table</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <style>
+    body {
+ background-image: url("https://webmartindia.in/img/slider/banner2.jpg");
+ background-color: #cccccc;
+}
+       
+    table, th, td {
+      border: 2px solid black;
+      border-collapse: collapse;
+      font-size: 20px;
+      
+      
+    }
+    th, td {
+      padding: 5px;
+
+    }
+    th {
+      text-align: left;
+      color:rgb(247, 246, 245);background-color: rgb(55, 182, 255);
+    }
+    td
+    {
+        color:black;
+        background-color:pink;
+    }
+    h2
+    {
+       color:blue; 
+       font-size: 30px;
+       
+       text-align: center;
+       
+    }
+    .center
+    {
+        margin-left: auto;
+  margin-right: auto;   
+    }
+   
+    p{
+        color:green;
+        font-size: 20px;
+        text-align: center;
+    }
+    
+    </style>
+    </head>
+    <body>
+    
+      <div>
+        <h2>Employee Table</h2>
+        <p>Key in your input to filter the table:</p>
+    <div class="box">
+        <input type="text "style="width: 200px; height:30px;margin-left:40%;" id="myinput" placeholder="Search..." title="Type in something">
+    </div>
+        <h3 style="color:purple;text-align: center;">Click on the header of a column to sort the table:</p>
+    
+        <table class="center">
+          <thead><tr>
+            <th><span id="name" class="w3-button table-column">Name <i class="caret"></span></th>
+            <th><span id="email" class="w3-button table-column">Email Id <i class="caret"></span></th>
+            <th><span id="mobile" class="w3-button table-column">Mobile <i class="caret"></span></th>
+            <th><span id="D.O.B" class="w3-button table-column">D.O.B <i class="caret"></span></th>
+                <th><span id="country" class="w3-button table-column">Country <i class="caret"></span></th>
+                    <th><span id="state" class="w3-button table-column">State<i class="caret"></span></th>
+                    <th><span id="city" class="w3-button table-column">City <i class="caret"></span></th>
+                    <th><span id="address" class="w3-button table-column">Address <i class="caret"></span></th>
+          </tr></thead>
+          <tbody id="mytable"></tbody>
+        </table>
+      </div>
+    
+    <script>
+    var table = document.getElementById('mytable');
+    var input = document.getElementById('myinput');
+    var tableData = [{name: 'Aakash', email:'aaksh2@gmail.com', mobile: 2637647, dob: '1990-09-12',country :'USA',state:'vbhj',city : 'iur',address : '99 uttam nager'},{name: 'Pawan', email:'pawan@gmail.com', mobile: 183765647, dob: '1996-05-18',country :'India',state:'GHI',city : 'mno', address : '88 mohali punjab'},{name: 'Sunil', email:'sunil@gmail.com', mobile: 895436198, dob: '1989-09-07',country :'Pakistan',state:'pqr',city : 'stu',address : '55 gali no 34 '},{name: 'Twinkle', email:'twinkle@gmail.com', mobile: 983764767, dob: '1993-12-12',country :'China',state:'abc',city : 'xyz',address : 'jaildar enclave rama park'},{name: 'Payal', email:'payal@gmail.com', mobile: 987637647, dob: '1980-6-21',country :'India',state:'Delhi',city : 'New Delhi',address : '67 abc gali no 87'} ];
+    var caretUpClassName = 'fa fa-caret-up';
+    var caretDownClassName = 'fa fa-caret-down';
+    
+    const sort_by = (field, reverse, primer) => {
+    
+      const key = primer ?
+        function(x) {
+          return primer(x[field]);
+        } :
+        function(x) {
+          return x[field];
+        };
+    
+      reverse = !reverse ? 1 : -1;
+    
+      return function(a, b) {
+        return a = key(a), b = key(b), reverse * ((a > b) - (b > a));
+      };
+    };
+    
+    
+    function clearArrow() {
+      let carets = document.getElementsByClassName('caret');
+      for (let caret of carets) {
+        caret.className = "caret";
+      }
+    }
+    
+    
+    function toggleArrow(event) {
+      let element = event.target;
+      let caret, field, reverse;
+      if (element.tagName === 'SPAN') {
+        caret = element.getElementsByClassName('caret')[0];
+        field = element.id
+      }
+      else {
+        caret = element;
+        field = element.parentElement.id
+      }
+    
+      let iconClassName = caret.className;
+      clearArrow();
+      if (iconClassName.includes(caretUpClassName)) {
+        caret.className = `caret ${caretDownClassName}`;
+        reverse = false;
+      } else {
+        reverse = true;
+        caret.className = `caret ${caretUpClassName}`;
+      }
+    
+      tableData.sort(sort_by(field, reverse));
+      populateTable();
+    }
+    
+    
+    function populateTable() {
+      table.innerHTML = '';
+      for (let data of tableData) {
+        let row = table.insertRow(-1);
+        let name = row.insertCell(0);
+        name.innerHTML = data.name;
+    
+        let email = row.insertCell(1);
+        email.innerHTML = data.email;
+    
+        let mobile = row.insertCell(2);
+        mobile.innerHTML = data.mobile;
+    
+        let dob = row.insertCell(3);
+        dob.innerHTML = data.dob;
+
+        let country= row.insertCell(4);
+        country.innerHTML = data.country;
+
+        let state = row.insertCell(5);
+        state.innerHTML = data.state;
+
+        let city = row.insertCell(6);
+        city.innerHTML = data.city;
+
+        let address = row.insertCell(7);
+        address.innerHTML = data.address;
+
+
+      }
+    
+      filterTable();
+    }
+    
+    
+    function filterTable() {
+      let filter = input.value.toUpperCase();
+      rows = table.getElementsByTagName("TR");
+      let flag = false;
+    
+      for (let row of rows) {
+        let cells = row.getElementsByTagName("TD");
+        for (let cell of cells) {
+          if (cell.textContent.toUpperCase().indexOf(filter) > -1) {
+            if (filter) {
+              cell.style.backgroundColor = 'yellow';
+            } else {
+              cell.style.backgroundColor = '';
+            }
+    
+            flag = true;
+          } else {
+            cell.style.backgroundColor = '';
+          }
+        }
+    
+        if (flag) {
+          row.style.display = "";
+        } else {
+          row.style.display = "none";
+        }
+    
+        flag = false;
+      }
+    }
+    
+    
+    populateTable();
+    
+    let tableColumns = document.getElementsByClassName('table-column');
+    
+    for (let column of tableColumns) {
+      column.addEventListener('click', function(event) {
+        toggleArrow(event);
+      });
+    }
+    
+    input.addEventListener('keyup', function(event) {
+      filterTable();
+    });
+    </script>
+    </body>
+    </html>
